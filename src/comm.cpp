@@ -28,6 +28,12 @@ Uwb::Uwb(const std::string & agent_id, const std::string & world_frame) {
 
 bool Uwb::return_path_srv(hololens_ls::GetHumanPath::Request& req, hololens_ls::GetHumanPath::Response& res){
     ROS_INFO("Requested human path");
+    int m_socket=server_link->getSocket();
+
+    lsmsg::UpdateLocationMessage msg = server_link->move();
+	ls::JsonMessage reqq(m_socket, msg.toJsonString());
+	server_link->pushRequest(reqq);
+
     this->humanPathRefreshCallback();
     ros::Duration(1.0).sleep();
     this->getPath();

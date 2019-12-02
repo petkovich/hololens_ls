@@ -20,6 +20,7 @@ void ServerLink::run()
 {
     receive_thread_ = std::thread([this](){receiverThread();});
     send_thread_ = std::thread{[this](){senderThread();}};
+    //update_location_thread_ = std::thread{[this](){updateLocationThread();}};
 
     /* Let the thread initialize. */
     std::this_thread::sleep_for(std::chrono::milliseconds{100});
@@ -27,6 +28,7 @@ void ServerLink::run()
 
 lsmsg::UpdateLocationMessage ServerLink::move()
 {
+    //ROS_INFO("Moving");
     ROS_DEBUG("Sending last pose to the server");
     std::lock_guard<std::mutex> guard(pose_mutex_);
     lsmsg::UpdateLocationMessage msg;

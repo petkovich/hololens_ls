@@ -36,9 +36,11 @@ public:
     void clearRobotPoses();
     void clearHumanPoses();
     void clearHumanPath();
+    lsmsg::UpdateLocationMessage move();
 
 protected:
-    lsmsg::UpdateLocationMessage move();
+
+
     bool onResponse(const std::string &msg);
     std::atomic_bool has_first_pose_{false};
     geometry_msgs::PoseStamped last_pose_;
