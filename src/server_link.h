@@ -32,6 +32,7 @@ public:
     std::vector<int> getHumanPath(); 
     int rid;
     int getSocket();
+    geometry_msgs::Pose getLastPose();
     void pushRequest(ls::JsonMessage);
     void clearRobotPoses();
     void clearHumanPoses();

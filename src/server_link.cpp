@@ -180,3 +180,7 @@ void ServerLink::pushRequest(const ls::JsonMessage req){
 void ServerLink::updateLastPose(const geometry_msgs::Pose pose){
     last_pose_.pose=pose;
 }
+
+// geometry_msgs::Pose ServerLink::getLastPose(){
+//     return last_pose_;
+// }

@@ -47,7 +47,7 @@ bool Uwb::return_path_srv(hololens_ls::GetHumanPath::Request& req, hololens_ls::
 }
 bool Uwb::return_pose_srv(hololens_ls::GetRobotPose::Request& req, hololens_ls::GetRobotPose::Response& res){
     ROS_INFO("Requested close robots");
-    this->humanPoseRefreshCallback();
+    //this->humanPoseRefreshCallback();
     this->poseRefreshCallback();
     ros::Duration(1.0).sleep();
     this->getPositions();
@@ -81,25 +81,31 @@ void Uwb::getPath(){
 
 void Uwb::humanCallback(const geometry_msgs::Pose msg){
     this->server_link->updateLastPose(msg);
+    this->human_x = msg.position.x;
+    this->human_y = msg.position.y;
 }
 
 void Uwb::getPositions() {
-    std::vector<idpose> poses;
-    std::vector<idpose> human_poses;
+    std::vector<idpose> poses;  
+    //std::vector<idpose> human_poses;
 
 
     poses = this->server_link->getRobotPoses();
-    human_poses =this->server_link->getHumanPoses(); 
+    //human_poses =this->server_link->getHumanPoses(); 
     this->server_link->clearRobotPoses();
-    this->server_link->clearHumanPoses();
+    //this->server_link->clearHumanPoses();
 
 
-    if (!human_poses.size()){
-        return;
-    }
-    auto human_pose = human_poses[0];
-    this->human_x = human_pose.pose_stamped.pose.x;
-    this->human_y = human_pose.pose_stamped.pose.y;
+    //if (!human_poses.size()){
+   //     return;
+   // }
+    //auto human_pose = human_poses[0];
+    //idpose human_pose;
+    //this->human_x = human_pose.pose_stamped.pose.x;
+    //this->human_y = human_pose.pose_stamped.pose.y;
+    //auto tmp_pose = this->server_link->getLastPose();
+    //this->human_x = tmp_pose.position.x;
+    //this->human_y = tmp_pose.position.y;
    // std::cout << "Human pose: " << this->human_x << ' '<< this->human_y << '\n';
     this->close_robots.poses.clear();
     int x=0;
@@ -110,7 +116,7 @@ void Uwb::getPositions() {
         //std::cout<< "Robot " << it->id << ": " << it->pose_stamped.pose.x << ' ' << it->pose_stamped.pose.y << '\n';
         auto distance = pow(it->pose_stamped.pose.x-this->human_x, 2) + pow(it->pose_stamped.pose.y-this->human_y, 2);
         //std::cout << "Distance: " << pow(distance, 0.5) << '\n';
-        if (pow(distance, 0.5) < this->D || 1){
+        if (pow(distance, 0.5) < this->D){
             aRobot.position.x=it->pose_stamped.pose.x;
             aRobot.position.y=it->pose_stamped.pose.y;
             this->close_robots.poses.push_back(aRobot);
