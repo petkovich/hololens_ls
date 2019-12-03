@@ -15,12 +15,12 @@ Uwb::Uwb(const std::string & agent_id, const std::string & world_frame) {
     //this->pose_refresh_timer = n.createTimer(ros::Duration(1), &Uwb::poseRefreshCallback, this);
     //this->human_pose_refresh_timer = n.createTimer(ros::Duration(1), &Uwb::humanPoseRefreshCallback, this);
     //this->human_path_refresh_timer = n.createTimer(ros::Duration(1), &Uwb::humanPathRefreshCallback, this);
-
+    this->human_pose_sub = n.subscribe("/human_pose", 1000, &Uwb::humanCallback,this);  
     this->get_path_srv = n.advertiseService("/human_path_srv", &Uwb::return_path_srv, this);
     this->get_pose_srv =  n.advertiseService("/close_robot_srv", &Uwb::return_pose_srv, this);
 
-    this->human_x= 1.0;
-    this->human_y = 2.0;
+    //this->human_x= 1.0;
+    //this->human_y = 2.0;
     this->D = 2.0;
     //std::cout<<"timer created"<<std::endl;
     server_link=new ServerLink{agent_id, world_frame};
@@ -30,13 +30,18 @@ bool Uwb::return_path_srv(hololens_ls::GetHumanPath::Request& req, hololens_ls::
     ROS_INFO("Requested human path");
     int m_socket=server_link->getSocket();
 
+    server_link->rid=0;
     lsmsg::UpdateLocationMessage msg = server_link->move();
 	ls::JsonMessage reqq(m_socket, msg.toJsonString());
 	server_link->pushRequest(reqq);
+    ros::Duration(1.0).sleep();
 
     this->humanPathRefreshCallback();
     ros::Duration(1.0).sleep();
+
     this->getPath();
+    server_link->rid=-1;
+    msg = server_link->move();   
     res.path=this->return_path;
     return true;
 }
@@ -72,6 +77,10 @@ void Uwb::getPath(){
         //path_pub.publish(return_path);   
     }
 
+}
+
+void Uwb::humanCallback(const geometry_msgs::Pose msg){
+    this->server_link->updateLastPose(msg);
 }
 
 void Uwb::getPositions() {

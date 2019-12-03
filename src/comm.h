@@ -66,7 +66,7 @@ class Uwb {
     bool pose_computed;
     ros::Publisher uwb_pub;
     ros::Publisher path_pub;
-    ros::Subscriber uwb_sub;
+    ros::Subscriber human_pose_sub;
     ros::Timer uwb_timer;
     ros::Timer pose_refresh_timer;
     ros::Timer human_pose_refresh_timer;
@@ -83,6 +83,7 @@ class Uwb {
     void addMeasurement(hololens_ls::RobotDistance);
     void filterMeasurements(void);
     void computePose(void);
+    void humanCallback(const geometry_msgs::Pose);
     void getPositions(void);
     void uwbCallback(const hololens_ls::RobotDistance);
     void computePosesCallback(const ros::TimerEvent& event);

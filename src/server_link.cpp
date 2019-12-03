@@ -4,6 +4,21 @@
 
 #include "server_link.h"
 
+#include <tf2/LinearMath/Quaternion.h>  // For tf2::Quaternion.
+#include <tf2/LinearMath/Matrix3x3.h>  // For tf2::Matrix3x3.
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>  // For tf2::fromMsg.
+
+double yawFromPose(const geometry_msgs::Pose & pose)
+{
+  tf2::Quaternion q;
+  tf2::fromMsg(pose.orientation, q);
+  tf2::Matrix3x3 t{q};
+  double roll;
+  double pitch;
+  double yaw;
+  t.getRPY(roll, pitch, yaw);
+  return yaw;
+}
 
 ServerLink::ServerLink(const std::string & agent_id, const std::string & world_frame)
         : LocationClient{agent_id},  world_frame_(world_frame)
@@ -31,9 +46,15 @@ lsmsg::UpdateLocationMessage ServerLink::move()
     //ROS_INFO("Moving");
     ROS_DEBUG("Sending last pose to the server");
     std::lock_guard<std::mutex> guard(pose_mutex_);
+
+    const double yaw = yawFromPose(last_pose_.pose);
+    lsmsg::Pose2D ls_pose = lsmsg::Pose2D{last_pose_.pose.position.x, last_pose_.pose.position.y, yaw};
+    lsmsg::Pose2DStamped poseStamped(ls_pose, world_frame_);
+
     lsmsg::UpdateLocationMessage msg;
     lsmsg::Location location;
-    location.nodeId = 0;
+    location.poseStamped = poseStamped;
+    location.rackId = rid;
     msg.addLocation(lsmsg::Agent(m_id, lsmsg::AGENT_HUMAN), location);
     return msg;
 }
@@ -138,6 +159,7 @@ std::vector<int> ServerLink::getHumanPath() {
     return human_path;
 }
 
+
 int ServerLink::getSocket() {
     return m_socket;
 }
@@ -153,4 +175,8 @@ void ServerLink::clearHumanPath(){
 }
 void ServerLink::pushRequest(const ls::JsonMessage req){
     m_requests.push(req);
+}
+
+void ServerLink::updateLastPose(const geometry_msgs::Pose pose){
+    last_pose_.pose=pose;
 }

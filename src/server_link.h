@@ -30,14 +30,14 @@ public:
     std::vector<idpose> getRobotPoses();
     std::vector<idpose> getHumanPoses(); 
     std::vector<int> getHumanPath(); 
-
+    int rid;
     int getSocket();
     void pushRequest(ls::JsonMessage);
     void clearRobotPoses();
     void clearHumanPoses();
     void clearHumanPath();
     lsmsg::UpdateLocationMessage move();
-
+    void updateLastPose(geometry_msgs::Pose);
 protected:
 
 
