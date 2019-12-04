@@ -23,11 +23,7 @@ set(SAFELOG_COMMON ${PROJECT_SOURCE_DIR}/../../safelog_common)
 set(SAFELOG_FMS ${PROJECT_SOURCE_DIR}/../../safelog_fleet_management_system)
 
 
-add_message_files(
-  FILES
-   uwb.msg
-   RobotDistance.msg
-)
+
 
 add_service_files(
   FILES
@@ -113,7 +109,7 @@ target_link_libraries(${PROJECT_NAME}_server_link
         )
 
 
-add_executable(${PROJECT_NAME}_node src/hololens_ls.cpp src/comm.cpp src/comm.h src/server_link.cpp src/server_link.h)
+add_executable(${PROJECT_NAME}_node src/hololens_ls.cpp src/HololensCommunication.cpp src/HololensCommunication.h src/server_link.cpp src/server_link.h)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_node

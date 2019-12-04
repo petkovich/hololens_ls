@@ -8,7 +8,7 @@
 #include "ros/ros.h"
 #include "std_msgs/Int16.h"
 
-#include "comm.h"
+#include "HololensCommunication.h"
 #include "server_link.h"
 
 #include <imrStringOps.h>
@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    Uwb uwb{agent_id, world_frame};
+    HololensCommunication uwb{agent_id, world_frame};
 
     lsmsg::Agent agent;
     agent.id = "all";
