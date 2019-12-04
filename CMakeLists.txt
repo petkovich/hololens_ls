@@ -17,10 +17,10 @@ find_package(Threads)
 find_package(Eigen3 REQUIRED)
 
 # Path to the safelog_common directory.
-set(SAFELOG_COMMON /home/tomislav/catkin_ws/safelog_common)
+set(SAFELOG_COMMON ${PROJECT_SOURCE_DIR}/../../safelog_common)
 
 # Path to the safelog_fleet_management_system directory.
-set(SAFELOG_FMS /home/tomislav/catkin_ws/safelog_fleet_management_system)
+set(SAFELOG_FMS ${PROJECT_SOURCE_DIR}/../../safelog_fleet_management_system)
 
 
 add_message_files(

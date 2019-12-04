@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<launch>
+ <node name="hololens_ls" pkg="hololens_ls" type="hololens_ls_node" output="screen">
+    <param name="config_filename" value="$(find hololens_ls)/config/augsburg.config"/>
+    <param name="agent_id" value="sv_nuc"/>    
+    <param name="world_frame" value="world"/>    
+ </node>
+
+</launch>
