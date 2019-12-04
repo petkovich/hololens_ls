@@ -8,7 +8,7 @@ set(SAFELOG_COMMON ${PROJECT_SOURCE_DIR}/../../safelog_common)
 set(SAFELOG_FMS ${PROJECT_SOURCE_DIR}/../../safelog_fleet_management_system)
 ```
 
-#Run simulation with:
+Run simulation with:
 ```
 
 cd /catkin_ws/safelog_common/LocationServer/Test/build
@@ -25,7 +25,7 @@ rostopic pub /human_pose geometry_msgs/Pose "{position: {x: 10.0, y: 2.0, z: 0.0
 rosservice call /close_robot_srv 
 ```
 
-#Run experiment with (check LS IP in config file):
+Run experiment with (check LS IP in config file):
 ```
 
 roslaunch hololens_ls augsburg.launch 
