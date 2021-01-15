@@ -1,5 +1,5 @@
 //
-// Created by goran on 29. 10. 2019..
+// Created by tomislav on 29. 10. 2019..
 //
 #include "HololensCommunication.h"
 
